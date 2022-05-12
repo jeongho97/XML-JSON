@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<!-- 
+
+	본이 읽은 책
+	제목, 저자, 가격, 발행일
+	4권 -> xml파일
+	데이터들을 읽고 시각화
+	Table로 시각화
+
+-->
+<!-- <table border="1" id="mytable">
+<tr>
+	<th>번호</th><th>제목</th><th>저자</th><th>가격</th><th>발행일</th>
+</tr>
+</table> -->
+<div id="books">
+
+</div>
+<script type="text/javascript">
+
+let xhttp=new XMLHttpRequest();
+
+xhttp.onreadystatechange=function(){
+	if(this.readyState==4&&this.status==200){
+		//nodeValueFunc(this);
+		xmlParse(this);
+	}
+}
+xhttp.open("GET","book.xml",true);
+xhttp.send();
+
+function nodeValueFunc(xml){
+	let title,author,price,date;
+	let t_txt,a_txt,p_txt,d_txt,xmlDoc;
+	
+	t_txt=a_txt=p_txt=d_txt="";
+	
+	xmlDoc=xml.responseXML;
+	console.log(xmlDoc);
+	
+	title=xmlDoc.getElementsByTagName("제목");
+	author=xmlDoc.getElementsByTagName("저자");
+	price=xmlDoc.getElementsByTagName("가격");
+	date=xmlDoc.getElementsByTagName("발행일");
+	
+	for (var i = 0; i < title.length; i++) {
+ 		t_txt=title[i].childNodes[0].nodeValue;
+		a_txt=author[i].childNodes[0].nodeValue;
+		p_txt=price[i].childNodes[0].nodeValue;
+		d_txt=date[i].childNodes[0].nodeValue; 
+		console.log(t_txt);
+
+		let table=document.getElementById("mytable");
+	
+
+		let tr=document.createElement("tr");
+		
+		let th=document.createElement("th");
+		th.appendChild(document.createTextNode(1+i+""));
+		
+ 		let td1=document.createElement("td");
+		td1.appendChild(document.createTextNode(t_txt+""))
+		
+		let td2=document.createElement("td");
+		td2.appendChild(document.createTextNode(a_txt+""))
+		
+		let td3=document.createElement("td");
+		td3.appendChild(document.createTextNode(p_txt+""))
+		
+		let td4=document.createElement("td");
+		td4.appendChild(document.createTextNode(d_txt+"")) 
+		
+		tr.appendChild(th);
+ 		tr.appendChild(td1);
+		tr.appendChild(td2);
+		tr.appendChild(td3);
+		tr.appendChild(td4); 
+		
+		table.appendChild(tr);
+		
+	}
+}
+function xmlParse(xml){
+	let xmlDoc = xml.responseXML;
+	// alert(xmlDoc);
+	
+	// root 취득
+	let rootTagName = xmlDoc.documentElement.nodeName;
+	//alert(rootTagName);
+	
+	// node명을 취득
+	let nodeArr = xmlDoc.documentElement.childNodes;
+	//alert(nodeArr);
+	
+	// node list를 확인
+	let nodeName;
+	for(i = 0;i < nodeArr.length; i++){
+		if(nodeArr[i].nodeType == 1){
+			nodeName = nodeArr[i].nodeName;
+			console.log(nodeName);
+		}
+	}
+	
+	// 시각화
+	// Table
+	let out = 	"<table border='1'>";
+	out += 		"<col width='50'><col width='100'><col width='140'><col width='100'><col width='100'>";
+	out +=		"<tr>";
+	out +=		"<th>번호</th>";
+	
+	// column 명을 취득
+	columnName = xmlDoc.getElementsByTagName(nodeName)[0];
+	alert(columnName.childNodes.length);
+	
+	let child = columnName.firstChild;
+	for(i = 0;i < columnName.childNodes.length; i++){
+		if(child.nodeType == 1){
+			out += "<th>" + child.nodeName + "</th>";
+		}
+		child = child.nextSibling;
+	}
+	out += "</tr>";
+	
+	// data 출력
+	let len = xmlDoc.getElementsByTagName(nodeName).length;
+	alert(len);
+	
+	for(i = 0;i < len; i++){
+		out += "<tr>";
+		out += "<th>" + (i + 1) + "</th>";
+		
+		let dataArr = xmlDoc.getElementsByTagName(nodeName)[i];
+		
+		child = dataArr.firstChild;
+		for (j = 0; j < dataArr.childNodes.length; j++) {
+			if(child.nodeType == 1){
+				out += "<td>" + child.childNodes[0].nodeValue + "</td>";
+			}
+			child = child.nextSibling;
+		}
+		
+		out += "</tr>";
+	}
+	
+	out += "</table>";
+	
+	document.getElementById("books").innerHTML = out;
+	
+}
+
+</script>
+</div>
+</body>
+</html>

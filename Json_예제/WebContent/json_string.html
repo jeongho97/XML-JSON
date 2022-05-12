@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!--
+		JSON:Java Script Object Notation
+								표기법
+			 한쌍(pair) key:value==HashMap(java)
+			 ["aaa","bbb","ccc"]->{name:"aaa",age:24,height:181.2}
+			 [
+			 	{
+			 		name:"홍길동",
+			 		age:24,
+			 		height:171.2
+			 	},
+			 	{
+			 		name:"성춘향",
+			 		age:16,
+			 		height:156.2
+			 	}
+			 ]
+
+ 
+-->
+
+<p id="demo"></p>
+
+<script type="text/javascript">
+
+let jsonData=[
+				{
+					"name":"홍길동",
+					"age":24
+				},
+				{
+					"name":"성춘향",
+					"age":16
+				},
+				{
+					"name":"일지매",
+					"age":22
+				}
+];
+
+//alert(JSON.stringify(jsonData)); //json데이터를 문자열로 바꿔줌
+document.getElementById("demo").innerHTML=jsonData[1].name+" "+jsonData[2].age;
+
+let arrText='{"name":"홍길동","age":24,"주소":"서울시"}';
+
+let json=JSON.parse(arrText); //string->json으로 바꿔줌
+//alert(json.name);
+
+let str =JSON.stringify(json) //json->string
+alert(str);
+
+</script>
+</body>
+</html>
